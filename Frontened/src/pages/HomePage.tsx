@@ -46,8 +46,29 @@ function HomePage() {
     }
   };
 
+  // Change: Added page transition variants for smoother entry and exit animations
+  const pageVariants = {
+    initial: { opacity: 0, y: -50 },
+    in: { opacity: 1, y: 0 },
+    out: { opacity: 0, y: 50 },
+  };
+
+  const pageTransition = {
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.5,
+  };
+
   return (
-    <div className="min-h-screen bg-[#1B1B1B] text-white">
+    // Change: Wrapping entire content in a motion.div to animate page transitions
+    <motion.div
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+      className="min-h-screen bg-[#1B1B1B] text-white"
+    >
       <Sidebar onSubscriptionClick={() => setIsSubscriptionModalOpen(true)} />
       <Header />
       <main className="pl-20 md:pl-64 pt-16">
@@ -64,7 +85,7 @@ function HomePage() {
               Let our AI-powered recommendations find the perfect music for your mood
             </p>
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, backgroundColor: "#EA580C" }} // Change: Added hover effect to change button background to accent-hover
               whileTap={{ scale: 0.95 }}
               className="mt-8 px-8 py-3 bg-orange-500 text-white rounded-full font-medium hover:bg-orange-600 transition-colors duration-300"
               onClick={handleGetRecommendations}
@@ -88,7 +109,7 @@ function HomePage() {
         isOpen={isSubscriptionModalOpen}
         onClose={() => setIsSubscriptionModalOpen(false)}
       />
-    </div>
+    </motion.div>
   );
 }
 

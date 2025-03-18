@@ -1,18 +1,25 @@
 
 // src/app.tsx
+// src/App.tsx
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import HomePage from "./pages/HomePage";
 import GetRecommendationPage from "./pages/GetRecommendationPage";
-import RecommendationsPage from "./pages/RecommendationsPage";  // Import the new page
+import RecommendationsPage from "./pages/RecommendationsPage";
 
 function App() {
+  const location = useLocation();
+
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/getRecommendation" element={<GetRecommendationPage />} />
-      <Route path="/recommendations" element={<RecommendationsPage />} />  {/* New route */}
-    </Routes>
+    // AnimatePresence enables exit animations on route change.
+    <AnimatePresence exitBeforeEnter>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/getRecommendation" element={<GetRecommendationPage />} />
+        <Route path="/recommendations" element={<RecommendationsPage />} />
+      </Routes>
+    </AnimatePresence>
   );
 }
 

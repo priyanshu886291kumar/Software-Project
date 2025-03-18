@@ -167,6 +167,7 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import Loader from "../components/Loader"; // Change: Imported Loader component
 
 function GetRecommendationPage() {
   const [emotion, setEmotion] = useState("Neutral");
@@ -284,14 +285,15 @@ function GetRecommendationPage() {
                 Start Camera
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, backgroundColor: "#EA580C" }} // Change: Hover effect now changes background to accent-hover
                 whileTap={{ scale: 0.95 }}
                 // Change: Using text-primary for button text
-                className="px-6 py-3 bg-green-600 rounded-full hover:bg-green-700 text-primary font-semibold"
+                className="px-6 py-3 bg-green-600 rounded-full text-primary font-semibold"
                 onClick={handleDetectEmotion}
                 disabled={loading}
               >
-                {loading ? "Detecting..." : "Detect Emotion"}
+                {/* Change: Using Loader component instead of text when loading */}
+                {loading ? <Loader /> : "Detect Emotion"}
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
