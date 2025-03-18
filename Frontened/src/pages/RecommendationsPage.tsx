@@ -1,12 +1,3 @@
-// 2. New File: RecommendationsPage.tsx
-// Create a new page that retrieves the recommended tracks from your backend based on the emotion and displays them attractively. For example, you might use a grid of cards:
-
-// src/pages/RecommendationsPage.tsx
-
-// src/pages/RecommendationsPage.tsx
-
-// src/pages/RecommendationsPage.tsx
-
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -45,8 +36,7 @@ function RecommendationsPage() {
   }, [emotion]);
 
   return (
-    // Change: Updated text color from "text-white" to "text-primary" and replaced "text-gray-300" with "text-secondary"
-    // Change: Added dark mode classes: dark:bg-backgroundLight dark:text-primaryDark
+    // Change: Updated text color and dark mode classes; added responsive grid and dark mode classes to the outer container.
     <div className="min-h-screen bg-background dark:bg-backgroundLight text-primary dark:text-primaryDark py-12 px-4">
       <header className="text-center mb-8">
         <h1 className="text-5xl font-bold">Your Recommended Tunes</h1>
@@ -56,7 +46,8 @@ function RecommendationsPage() {
         </p>
       </header>
       {error && <p className="text-red-400 text-center mb-4">{error}</p>}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Change: Responsive grid - single column on small screens, 2 columns on md, and 3 columns on lg screens */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tracks.map((track, index) => (
           <TrackCard key={index} track={track} />
         ))}

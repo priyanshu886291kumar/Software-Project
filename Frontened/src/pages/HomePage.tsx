@@ -72,17 +72,17 @@ function HomePage() {
     >
       <Sidebar onSubscriptionClick={() => setIsSubscriptionModalOpen(true)} />
       <Header />
-      <main className="pl-20 md:pl-64 pt-16">
+      <main className="pl-4 sm:pl-20 md:pl-64 pt-16">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-12 text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
               Discover Your Perfect Sound
             </h1>
-            {/* Change: Using text-gray-400 changed to text-secondary */}
+            {/* Change: Using text-secondary for descriptive text */}
             <p className="text-secondary text-lg max-w-2xl mx-auto">
               Let our AI-powered recommendations find the perfect music for your mood
             </p>
@@ -103,6 +103,7 @@ function HomePage() {
             />
           </div>
 
+          {/* Change: Update MusicGrid to use responsive grid classes */}
           <MusicGrid songs={mockSongs} />
         </div>
       </main>
