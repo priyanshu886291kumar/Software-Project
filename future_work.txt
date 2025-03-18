@@ -69,3 +69,20 @@ To make your project industry-level, you should also consider:
 
 
 
+TASK4:Enhanced Music Recommendations:
+Integrate with real APIs (like Spotify or Last.fm) to fetch dynamic music recommendations based on user mood or history.
+User Interaction Features:
+Add features such as favorites, playlists, or user ratings to enhance engagement.
+Search and Filter:
+Expand the filtering capabilities in CategoryFilter to allow for more complex queries or multiple criteria.
+
+
+TASK5:Accessibility & Performance:
+
+Accessibility:
+Audit your project for accessibility improvements (ARIA labels, keyboard navigation, color contrast, etc.).
+Performance Optimization:
+Use techniques such as lazy loading, code splitting, and optimizing image assets to ensure fast load times.
+
+
+TASK6:

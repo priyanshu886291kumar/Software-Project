@@ -50,3 +50,8 @@ STEP6:  docker run --name my-redis -p 6379:6379 -d redis
 
 STEP7:  docker ps
 This command lists all running containers, and you should see your "my-redis" container there.
+
+STEP8: docker-compose up --build -d
+    docker-compose down
+
+   

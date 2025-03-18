@@ -3,6 +3,10 @@
 
 // src/pages/RecommendationsPage.tsx
 
+// src/pages/RecommendationsPage.tsx
+
+// src/pages/RecommendationsPage.tsx
+
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -31,7 +35,6 @@ function RecommendationsPage() {
           setTracks(data.tracks);
         } else {
           console.log(data.error);
-          
           setError(data.error || "Error fetching recommendations");
         }
       } catch (err) {
@@ -42,10 +45,12 @@ function RecommendationsPage() {
   }, [emotion]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white py-12 px-4">
+    // Change: Updated text color from "text-white" to "text-primary" and replaced "text-gray-300" with "text-secondary"
+    <div className="min-h-screen bg-background text-primary py-12 px-4">
       <header className="text-center mb-8">
         <h1 className="text-5xl font-bold">Your Recommended Tunes</h1>
-        <p className="mt-2 text-xl text-gray-300">
+        {/* Change: text-gray-300 changed to text-secondary */}
+        <p className="mt-2 text-xl text-secondary">
           Based on your emotion: <span className="font-bold">{emotion}</span>
         </p>
       </header>
