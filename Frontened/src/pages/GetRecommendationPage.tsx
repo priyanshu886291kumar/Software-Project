@@ -244,8 +244,8 @@ function GetRecommendationPage() {
   };
 
   return (
-    // Change: Updated background and text colors using custom classes: bg-background and text-primary.
-    <div className="min-h-screen bg-background text-primary flex flex-col items-center py-12 px-4">
+    // Change: Added dark mode classes (dark:bg-backgroundLight and dark:text-primaryDark) to the outer container
+    <div className="min-h-screen bg-background dark:bg-backgroundLight text-primary dark:text-primaryDark flex flex-col items-center py-12 px-4">
       <header className="mb-8 text-center">
         <h1 className="text-5xl font-bold">Emotion-Based Music Recommendation System</h1>
         {/* Change: Using text-secondary for descriptive text */}

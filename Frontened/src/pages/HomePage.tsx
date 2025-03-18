@@ -61,13 +61,14 @@ function HomePage() {
 
   return (
     // Change: Wrapping entire content in a motion.div to animate page transitions
+    // Change: Added dark mode classes: dark:bg-backgroundLight dark:text-primaryDark
     <motion.div
       initial="initial"
       animate="in"
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
-      className="min-h-screen bg-[#1B1B1B] text-white"
+      className="min-h-screen bg-background dark:bg-backgroundLight text-white dark:text-primaryDark"
     >
       <Sidebar onSubscriptionClick={() => setIsSubscriptionModalOpen(true)} />
       <Header />
@@ -81,7 +82,8 @@ function HomePage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Discover Your Perfect Sound
             </h1>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            {/* Change: Using text-gray-400 changed to text-secondary */}
+            <p className="text-secondary text-lg max-w-2xl mx-auto">
               Let our AI-powered recommendations find the perfect music for your mood
             </p>
             <motion.button

@@ -46,7 +46,8 @@ function RecommendationsPage() {
 
   return (
     // Change: Updated text color from "text-white" to "text-primary" and replaced "text-gray-300" with "text-secondary"
-    <div className="min-h-screen bg-background text-primary py-12 px-4">
+    // Change: Added dark mode classes: dark:bg-backgroundLight dark:text-primaryDark
+    <div className="min-h-screen bg-background dark:bg-backgroundLight text-primary dark:text-primaryDark py-12 px-4">
       <header className="text-center mb-8">
         <h1 className="text-5xl font-bold">Your Recommended Tunes</h1>
         {/* Change: text-gray-300 changed to text-secondary */}

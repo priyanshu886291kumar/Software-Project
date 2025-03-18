@@ -54,4 +54,13 @@ This command lists all running containers, and you should see your "my-redis" co
 STEP8: docker-compose up --build -d
     docker-compose down
 
-   
+STEP9: To create image 
+ docker build -t (write name of image) 
+
+STEP10: To remove image
+ docker image rm  (image name)
+
+by writing f you can delete forcefully do chatgpt i am not sure like docker image -rm imagename -fast
+{-f means if container are running then you want to delete image in that case it work}
+
+STEP11: docker ps -a
