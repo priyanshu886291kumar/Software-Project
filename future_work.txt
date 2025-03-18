@@ -85,4 +85,7 @@ Performance Optimization:
 Use techniques such as lazy loading, code splitting, and optimizing image assets to ensure fast load times.
 
 
-TASK6:
+TASK6:# Save to database (if user info is available)
+        # Example: new_history = EmotionHistory(user_id=<user_id>, emotion=dominant_emotion)
+        # db.session.add(new_history)
+        # db.session.commit()

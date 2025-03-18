@@ -36,6 +36,8 @@ def get_spotify_token():
     
     return token
 
+
+
 def get_recommendations_by_emotion(emotion):
     """
     Given an emotion string, map it to a search keyword and query Spotify
@@ -57,7 +59,7 @@ def get_recommendations_by_emotion(emotion):
     params = {
         "q": query,
         "type": "track",
-        "limit": 10,
+        "limit": 20,
     }
     response = requests.get(search_url, headers=headers, params=params)
     response.raise_for_status()
