@@ -1,17 +1,35 @@
+// src/components/Header.tsx
 import React, { useState } from 'react';
 import { Search, User, Settings, Bell, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUser, useClerk } from '@clerk/clerk-react';
 import { useTheme } from '../context/ThemeContext';
+import { useNavigate } from 'react-router-dom'; // NEW: Import useNavigate
 
 const Header = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // NEW: State for search query
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [selectedMenuOption, setSelectedMenuOption] = useState<string | null>(null);
 
   const { user, isSignedIn } = useUser();
   const { openSignIn, signOut } = useClerk();
   const { darkMode, toggleDarkMode } = useTheme();
+  const navigate = useNavigate(); // NEW: useNavigate hook
+
+  // NEW: Handler for search – navigates to /player with the search query in location state
+  const handleSearch = () => {
+    if (searchQuery.trim() !== "") {
+      navigate("/player", { state: { searchQuery } });
+    }
+  };
+
+  // NEW: Trigger search on Enter key press in search input
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   const handleProfileClick = () => {
     if (!isSignedIn) {
@@ -30,19 +48,28 @@ const Header = () => {
     <header className="h-16 bg-[#1B1B1B]/95 backdrop-blur-md fixed top-0 right-0 left-0 z-50 pl-24 md:pl-72">
       <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-4">
         <div className="flex-1 max-w-2xl mx-auto relative">
+          {/* NEW: Search bar integrated in the header */}
           <div
-            className={`relative rounded-full transition-all duration-300 ${
-              isSearchFocused ? 'ring-2 ring-orange-500' : ''
-            }`}
+            className={`relative rounded-full transition-all duration-300 ${isSearchFocused ? 'ring-2 ring-orange-500' : ''}`}
           >
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
               placeholder="Search for songs, artists, or albums..."
               className="w-full bg-white/5 text-white pl-10 pr-4 py-2 rounded-full outline-none placeholder-gray-400 transition-all duration-300 focus:bg-white/10"
+              value={searchQuery} // NEW: Controlled input for search query
+              onChange={(e) => setSearchQuery(e.target.value)} // NEW: Update search query state
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
+              onKeyPress={handleKeyPress} // NEW: Listen for Enter key
             />
+            
+            <button
+              onClick={handleSearch} // NEW: Search button click handler
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 rounded-full bg-orange-500 text-white transition-colors duration-300 shadow-md"
+            >
+              Search
+            </button>
           </div>
         </div>
         <div className="flex items-center space-x-4">

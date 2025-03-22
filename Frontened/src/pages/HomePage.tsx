@@ -1,3 +1,6 @@
+
+
+// src/pages/HomePage.tsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -46,7 +49,7 @@ function HomePage() {
     }
   };
 
-  // Change: Added page transition variants for smoother entry and exit animations
+  // Page transition variants
   const pageVariants = {
     initial: { opacity: 0, y: -50 },
     in: { opacity: 1, y: 0 },
@@ -60,8 +63,7 @@ function HomePage() {
   };
 
   return (
-    // Change: Wrapping entire content in a motion.div to animate page transitions
-    // Change: Added dark mode classes: dark:bg-backgroundLight dark:text-primaryDark
+    // Wrapping entire content with motion.div and applying dark mode classes from Tailwind config.
     <motion.div
       initial="initial"
       animate="in"
@@ -74,6 +76,7 @@ function HomePage() {
       <Header />
       <main className="pl-4 sm:pl-20 md:pl-64 pt-16">
         <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Removed the duplicate search bar here, since search is only in the Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -82,12 +85,12 @@ function HomePage() {
             <h1 className="text-4xl sm:text-5xl font-bold mb-4">
               Discover Your Perfect Sound
             </h1>
-            {/* Change: Using text-secondary for descriptive text */}
+            {/* Using text-secondary for descriptive text */}
             <p className="text-secondary text-lg max-w-2xl mx-auto">
               Let our AI-powered recommendations find the perfect music for your mood
             </p>
             <motion.button
-              whileHover={{ scale: 1.05, backgroundColor: "#EA580C" }} // Change: Added hover effect to change button background to accent-hover
+              whileHover={{ scale: 1.05, backgroundColor: "#EA580C" }}
               whileTap={{ scale: 0.95 }}
               className="mt-8 px-8 py-3 bg-orange-500 text-white rounded-full font-medium hover:bg-orange-600 transition-colors duration-300"
               onClick={handleGetRecommendations}
@@ -103,7 +106,6 @@ function HomePage() {
             />
           </div>
 
-          {/* Change: Update MusicGrid to use responsive grid classes */}
           <MusicGrid songs={mockSongs} />
         </div>
       </main>

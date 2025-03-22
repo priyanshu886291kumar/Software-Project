@@ -7,6 +7,9 @@ import { AnimatePresence } from "framer-motion";
 import HomePage from "./pages/HomePage";
 import GetRecommendationPage from "./pages/GetRecommendationPage";
 import RecommendationsPage from "./pages/RecommendationsPage";
+import Player from "./pages/Player";
+
+
 
 function App() {
   const location = useLocation();
@@ -16,6 +19,8 @@ function App() {
     <AnimatePresence exitBeforeEnter>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/player" element={<Player />} />
+
         <Route path="/getRecommendation" element={<GetRecommendationPage />} />
         <Route path="/recommendations" element={<RecommendationsPage />} />
       </Routes>

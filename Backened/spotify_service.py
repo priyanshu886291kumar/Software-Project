@@ -6,6 +6,7 @@ import requests
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 #  you use the Redis client to connect to the Redis server at localhost:6379 (this is the Redis server running in your Docker container).
 
+
 CLIENT_ID = os.getenv("CLIENT_ID", "dea716ed40cc40b79f656f9fcbec3a02")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET", "c877d293b0f04c4fa2dabe10a96173b1")
 

@@ -1,0 +1,174 @@
+Below is a step‐by‐step plan (ordered and combined) that shows how to complete all the tasks required by your assignment. This plan covers both Part A (Data Access Layer and core business logic modules) and Part B (testing and documentation of business rules, validation, and data transformation). Follow these steps in order:
+
+---
+
+## **Step-by-Step Plan**
+
+### **Part A: Implementing the Data Access Layer (DAL) and Core Business Logic Modules**
+
+1. **Set Up Your Database Environment**
+
+   - **a. Use Docker to Run PostgreSQL:**  
+     • Create or update your `docker-compose.yml` file in your project root (or backend folder) to include a PostgreSQL service.  
+     • Example configuration:
+       ```yaml
+       version: "3.8"
+       services:
+         postgres:
+           image: postgres:15
+           environment:
+             POSTGRES_USER: postgres
+             POSTGRES_PASSWORD: password
+             POSTGRES_DB: moodscape_db
+           ports:
+             - "5432:5432"
+           volumes:
+             - pgdata:/var/lib/postgresql/data
+       volumes:
+         pgdata:
+       ```
+     • Run:  
+       ```bash
+       docker-compose up -d postgres
+       ```
+       This launches your PostgreSQL database (`moodscape_db`).
+
+2. **Create Database Models**
+
+   - **a. Create/Update `models.py`:**  
+     • In your Backened folder, create a file called `models.py`.  
+     • Define your models for User, EmotionHistory, FavoriteTrack, Playlist, PlaylistTrack, and Rating using SQLAlchemy.  
+     • (See the sample code provided earlier for guidance.)
+
+3. **Integrate SQLAlchemy and Flask-Migrate**
+
+   - **a. Update `app.py`:**  
+     • Import and configure SQLAlchemy and Flask-Migrate.  
+     • Set the database URI to connect to your PostgreSQL instance (e.g., `postgresql://postgres:password@localhost:5432/moodscape_db`).  
+     • Initialize the database and migration objects:
+       ```python
+       from flask import Flask, jsonify, request
+       from flask_cors import CORS
+       from flask_migrate import Migrate
+       from models import db, User, EmotionHistory, FavoriteTrack, Playlist, PlaylistTrack, Rating
+
+       app = Flask(__name__)
+       CORS(app)
+       app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/moodscape_db'
+       app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+       db.init_app(app)
+       migrate = Migrate(app, db)
+       ```
+4. **Run Database Migrations**
+
+   - **a. In your terminal (inside the Backened folder), run:**  
+     • `flask db init` *(only if not already done)*  
+     • `flask db migrate -m "Initial migration for user preferences, emotion history, favorites, playlists, and ratings."`  
+     • `flask db upgrade`  
+     These commands create your tables in PostgreSQL.
+
+5. **Implement the Core Business Logic Modules**
+
+   - **Emotion Detection Module:**  
+     • Ensure your `/api/emotion` endpoint is implemented in `app.py` using DeepFace.  
+     • Validate that image data is provided and decodable; if not, default to “Neutral.”  
+     • (You have this mostly implemented already.)
+
+   - **Music Recommendation Module:**  
+     • Implement the `/api/recommendations` endpoint in `app.py`.  
+     • Use a predefined mapping from emotion to query keywords.  
+     • In `spotify_service.py`, retrieve a Spotify token from Redis (caching it so it’s refreshed only once per hour), call the Spotify API with the mapped query, and transform the response to extract only needed fields (name, artist, album, image, spotify_url).
+
+   - **User Preferences & Interaction Module:**  
+     • Implement endpoints (e.g., `/api/users/preferences`) in `app.py` to update and retrieve user settings (favorite genre, playlist management, ratings).  
+     • Validate input (e.g., ensure a user ID is provided, check for valid preference values).  
+     • Enforce business rules such as preventing duplicate favorites or ratings.
+
+   - **(Optional) Data Access Abstraction:**  
+     • Create helper functions or a repository layer (e.g., in a new file like `repositories.py`) that encapsulate common CRUD operations.  
+     • This further abstracts the DAL from your business logic.
+
+6. **Document How Each Module Interacts with the UI**
+
+   - **Emotion Detection Interaction:**  
+     • The UI (GetRecommendationPage) sends a POST request with image data to `/api/emotion` and receives a JSON response with the detected emotion.
+   - **Music Recommendation Interaction:**  
+     • The UI (RecommendationsPage) calls GET `/api/recommendations?emotion=...` and receives a list of tracks.
+   - **User Preferences Interaction:**  
+     • The UI (Profile/Settings page) sends PUT/POST requests to update user preferences and receives confirmation/error responses.
+
+---
+
+### **Part B: Testing and Documentation**
+
+1. **White Box Testing (Internal, 10 Marks)**
+
+   - **a. Set Up Testing Environment:**  
+     • Install pytest and any plugins (e.g., `pytest-flask`):  
+       ```bash
+       pip install pytest pytest-flask
+       ```
+     • Create a `tests/` directory in your Backened folder.
+
+   - **b. Write Unit Tests:**  
+     • Write tests for your business logic and endpoints. For example, create `tests/test_emotion.py` and include test cases for missing image data, invalid image data, and proper emotion defaults.
+     • Write tests for the Spotify recommendation module to check that the mapping and token caching work as expected.
+     • Write tests for the user preferences endpoint to ensure valid input is accepted and invalid input is rejected.
+
+   - **c. Run Tests:**  
+     • Run `pytest` from the terminal and ensure all tests pass.
+
+2. **Black Box Testing (Functional, 10 Marks)**
+
+   - **a. Identify Functional Test Cases:**  
+     • For `/api/emotion`: Test with valid image data, missing image, and invalid image data.
+     • For `/api/recommendations`: Test with various emotion queries (e.g., happy, sad) and verify that a proper JSON response with track data is returned.
+     • For `/api/users/preferences`: Test updating preferences with valid and invalid data.
+   - **b. Perform Testing Using External Tools:**  
+     • Use Postman or curl to send requests to each endpoint.  
+     • Record expected outputs and verify actual outputs.
+   - **c. Document Your Test Cases:**  
+     • Write down the test cases, inputs, expected outputs, and actual outputs.
+
+3. **Documentation (Q2 Descriptions)**
+
+   - **A) Business Rules Implementation:**  
+     • Write a description of how each module applies business rules.  
+     • For emotion detection, explain that DeepFace is used and defaults to “Neutral” when no emotion is detected.  
+     • For music recommendation, explain the mapping from emotion to query keyword and the token caching via Redis.  
+     • For user interaction, explain that only valid inputs are accepted and duplicate actions are prevented.
+   - **B) Validation Logic:**  
+     • Describe how the endpoints validate input (e.g., checking for an image in `/api/emotion`, ensuring user ID in `/api/users/preferences`).  
+     • Explain error handling with proper HTTP status codes and error messages.
+   - **C) Data Transformation:**  
+     • Explain how raw data from the Spotify API is transformed to include only the necessary fields for the UI.  
+     • Describe how data from the database is converted to simple JSON responses for the frontend.
+
+---
+
+### **Final Order of Tasks**
+
+1. **Database Setup and Models (DAL):**  
+   - Set up PostgreSQL via Docker.  
+   - Create models in `models.py`.  
+   - Update `app.py` for SQLAlchemy/Flask-Migrate.  
+   - Run migrations.
+
+2. **Business Logic Implementation:**  
+   - Finalize the `/api/emotion` endpoint (emotion detection module).  
+   - Finalize the `/api/recommendations` endpoint and `spotify_service.py` (music recommendation module).  
+   - Implement and test the `/api/users/preferences` endpoint and any other user interaction endpoints (user preferences module).
+
+3. **Testing:**  
+   - Set up the testing environment with pytest.  
+   - Write and run White Box tests for internal functions and endpoints.  
+   - Create and execute Black Box test cases using Postman/curl.
+
+4. **Documentation:**  
+   - Write clear descriptions for:  
+     A) Business Rules Implementation for each module.  
+     B) Validation Logic and error handling.  
+     C) Data Transformation from external APIs and database responses.
+
+Following these ordered steps will ensure you cover all parts of the assignment in a logical, structured way, aligning with what you have done so far in your emotion-based music recommendation system project.

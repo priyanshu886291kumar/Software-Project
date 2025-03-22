@@ -1,19 +1,47 @@
+# services:
+#   # backend:
+#   #   build:
+#   #     context: ./Backened
+#   #     dockerfile: Dockerfile
+#   #   ports:
+#   #     - "5000:5000"
+#   #   environment:
+#   #     - CLIENT_ID=dea716ed40cc40b79f656f9fcbec3a02
+#   #     - CLIENT_SECRET=c877d293b0f04c4fa2dabe10a96173b1
+#   #     - FLASK_APP=app.py
+#   #     - FLASK_ENV=development
+#   #   depends_on:
+#   #     - redis
+#   #   networks:
+#   #     - app-network
+
+#   redis:
+#     image: redis:latest
+#     ports:
+#       - "6379:6379"
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
+
+
+version: "3.8"
+
 services:
-  # backend:
-  #   build:
-  #     context: ./Backened
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "5000:5000"
-  #   environment:
-  #     - CLIENT_ID=dea716ed40cc40b79f656f9fcbec3a02
-  #     - CLIENT_SECRET=c877d293b0f04c4fa2dabe10a96173b1
-  #     - FLASK_APP=app.py
-  #     - FLASK_ENV=development
-  #   depends_on:
-  #     - redis
-  #   networks:
-  #     - app-network
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: moodscape_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   redis:
     image: redis:latest
@@ -25,3 +53,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  pgdata:
