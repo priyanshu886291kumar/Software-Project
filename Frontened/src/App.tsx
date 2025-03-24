@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import GetRecommendationPage from "./pages/GetRecommendationPage";
 import RecommendationsPage from "./pages/RecommendationsPage";
 import Player from "./pages/Player";
+import SubscriptionPage from "./pages/SubscriptionPage"; // <-- New import
 
 
 
@@ -23,6 +24,9 @@ function App() {
 
         <Route path="/getRecommendation" element={<GetRecommendationPage />} />
         <Route path="/recommendations" element={<RecommendationsPage />} />
+              {/* New: Subscription route */}
+      <Route path="/subscription" element={<SubscriptionPage />} />
+
       </Routes>
     </AnimatePresence>
   );
