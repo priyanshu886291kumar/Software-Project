@@ -62,6 +62,9 @@ function HomePage() {
     duration: 0.5,
   };
 
+
+
+
   return (
     // Wrapping entire content with motion.div and applying dark mode classes from Tailwind config.
     <motion.div
@@ -72,6 +75,8 @@ function HomePage() {
       transition={pageTransition}
       className="min-h-screen bg-background dark:bg-backgroundLight text-white dark:text-primaryDark"
     >
+
+
       <Sidebar onSubscriptionClick={() => setIsSubscriptionModalOpen(true)} />
       <Header />
       <main className="pl-4 sm:pl-20 md:pl-64 pt-16">

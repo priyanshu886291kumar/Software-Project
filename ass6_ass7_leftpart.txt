@@ -138,9 +138,11 @@ Below is a step‐by‐step plan (ordered and combined) that shows how to comple
      • For emotion detection, explain that DeepFace is used and defaults to “Neutral” when no emotion is detected.  
      • For music recommendation, explain the mapping from emotion to query keyword and the token caching via Redis.  
      • For user interaction, explain that only valid inputs are accepted and duplicate actions are prevented.
+
    - **B) Validation Logic:**  
      • Describe how the endpoints validate input (e.g., checking for an image in `/api/emotion`, ensuring user ID in `/api/users/preferences`).  
      • Explain error handling with proper HTTP status codes and error messages.
+
    - **C) Data Transformation:**  
      • Explain how raw data from the Spotify API is transformed to include only the necessary fields for the UI.  
      • Describe how data from the database is converted to simple JSON responses for the frontend.
@@ -155,15 +157,21 @@ Below is a step‐by‐step plan (ordered and combined) that shows how to comple
    - Update `app.py` for SQLAlchemy/Flask-Migrate.  
    - Run migrations.
 
+
 2. **Business Logic Implementation:**  
+
    - Finalize the `/api/emotion` endpoint (emotion detection module).  
    - Finalize the `/api/recommendations` endpoint and `spotify_service.py` (music recommendation module).  
    - Implement and test the `/api/users/preferences` endpoint and any other user interaction endpoints (user preferences module).
+
+
 
 3. **Testing:**  
    - Set up the testing environment with pytest.  
    - Write and run White Box tests for internal functions and endpoints.  
    - Create and execute Black Box test cases using Postman/curl.
+
+
 
 4. **Documentation:**  
    - Write clear descriptions for:  

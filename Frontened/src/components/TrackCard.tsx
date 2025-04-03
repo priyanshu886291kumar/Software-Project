@@ -1,6 +1,9 @@
+
+
 // // src/components/TrackCard.tsx
 // import React, { useState } from "react";
-// import { Heart, ThumbsUp, ThumbsDown, Bookmark, Play } from "lucide-react"; // Change: Added Play icon
+// import { Heart, ThumbsUp, ThumbsDown, Bookmark, Play } from "lucide-react";
+
 // interface Track {
 //   name: string;
 //   artist: string;
@@ -8,17 +11,20 @@
 //   image: string;
 //   spotify_url: string;
 // }
+
 // interface Props {
 //   track: Track;
-//   onPlay: (embedUrl: string) => void; // Change: Callback to trigger playback
+//   onPlay: (embedUrl: string) => void; // Callback for playback
 // }
+
 // const TrackCard: React.FC<Props> = ({ track, onPlay }) => {
 //   const [favorite, setFavorite] = useState(false);
 //   const [liked, setLiked] = useState(false);
 //   const [disliked, setDisliked] = useState(false);
 //   const [saved, setSaved] = useState(false);
-//   const user_id = 1; // Simulated user id; replace with real user info in production
+//   const user_id = 1; // Simulated user ID; replace with real user info from authentication
 
+//   // Handler for Favorite button
 //   const handleAddFavorite = async () => {
 //     try {
 //       const response = await fetch("http://localhost:5000/api/favorites", {
@@ -41,6 +47,7 @@
 //     }
 //   };
 
+//   // Handler for Like button
 //   const handleLike = async () => {
 //     try {
 //       const response = await fetch("http://localhost:5000/api/likes", {
@@ -64,6 +71,8 @@
 //     }
 //   };
 
+
+//   // Handler for Dislike button
 //   const handleDislike = async () => {
 //     try {
 //       const response = await fetch("http://localhost:5000/api/dislikes", {
@@ -87,6 +96,8 @@
 //     }
 //   };
 
+
+//   // Handler for Save button
 //   const handleSave = async () => {
 //     try {
 //       const response = await fetch("http://localhost:5000/api/saves", {
@@ -109,7 +120,8 @@
 //     }
 //   };
 
-//   // Helper: Extract track ID and build Spotify embed URL
+  
+//   // Helper: Construct Spotify embed URL from the track's spotify_url
 //   const getSpotifyEmbedUrl = (url: string) => {
 //     const parts = url.split("/");
 //     const lastPart = parts[parts.length - 1];
@@ -123,7 +135,7 @@
 //       <div className="p-4">
 //         <h3 className="text-xl font-bold">{track.name}</h3>
 //         <p className="text-gray-400">{track.artist}</p>
-//         {/* Change: Instead of a link, add a play button in the center */}
+//         {/* Play Button */}
 //         <button
 //           onClick={() => onPlay(getSpotifyEmbedUrl(track.spotify_url))}
 //           className="mt-2 flex items-center justify-center w-full px-3 py-2 bg-accent text-white rounded hover:bg-accent-hover transition-colors duration-300"
@@ -131,33 +143,18 @@
 //           <Play className="h-5 w-5 mr-2" />
 //           <span>Play</span>
 //         </button>
-//         <div className="flex justify-between items-center mt-4">
-//           <button
-//             onClick={handleAddFavorite}
-//             disabled={favorite}
-//             className="p-2 rounded-full transition-colors duration-300"
-//           >
+//         {/* Action Buttons */}
+//         <div className="flex justify-around items-center mt-4">
+//           <button onClick={handleAddFavorite} disabled={favorite} className="p-2 rounded-full transition-colors duration-300">
 //             <Heart className={`h-6 w-6 ${favorite ? "text-red-500" : "text-gray-400 hover:text-red-500"}`} />
 //           </button>
-//           <button
-//             onClick={handleLike}
-//             disabled={liked}
-//             className="p-2 rounded-full transition-colors duration-300"
-//           >
+//           <button onClick={handleLike} disabled={liked} className="p-2 rounded-full transition-colors duration-300">
 //             <ThumbsUp className={`h-6 w-6 ${liked ? "text-green-500" : "text-gray-400 hover:text-green-500"}`} />
 //           </button>
-//           <button
-//             onClick={handleDislike}
-//             disabled={disliked}
-//             className="p-2 rounded-full transition-colors duration-300"
-//           >
+//           <button onClick={handleDislike} disabled={disliked} className="p-2 rounded-full transition-colors duration-300">
 //             <ThumbsDown className={`h-6 w-6 ${disliked ? "text-yellow-500" : "text-gray-400 hover:text-yellow-500"}`} />
 //           </button>
-//           <button
-//             onClick={handleSave}
-//             disabled={saved}
-//             className="p-2 rounded-full transition-colors duration-300"
-//           >
+//           <button onClick={handleSave} disabled={saved} className="p-2 rounded-full transition-colors duration-300">
 //             <Bookmark className={`h-6 w-6 ${saved ? "text-blue-500" : "text-gray-400 hover:text-blue-500"}`} />
 //           </button>
 //         </div>
@@ -169,9 +166,11 @@
 // export default TrackCard;
 
 
-// src/components/TrackCard.tsx
+
+
+
 import React, { useState } from "react";
-import { Heart, Play } from "lucide-react"; // We use the Heart icon for like and Play for playing music
+import { Heart, ThumbsUp, ThumbsDown, Bookmark, Play } from "lucide-react";
 
 interface Track {
   name: string;
@@ -187,14 +186,118 @@ interface Props {
 }
 
 const TrackCard: React.FC<Props> = ({ track, onPlay }) => {
+  const [favorite, setFavorite] = useState(false);
   const [liked, setLiked] = useState(false);
-  const user_id = 1; // Simulated user id; in production, use real user info from auth
+  const [disliked, setDisliked] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  // Handler for the Like button
-  
-  const handleLike = async () => {
+  // Retrieve user_id from local storage
+  const user_id = localStorage.getItem("user_id");
+
+  // Helper function to check if user_id exists
+  const ensureUserId = () => {
+    if (!user_id) {
+      alert("Please create a test user first!");
+      return false;
+    }
+    return true;
+  };
+
+  // Handler for Favorite button
+  const handleAddFavorite = async () => {
+    if (!ensureUserId()) return;
+
     try {
-      const response = await fetch("http://localhost:5000/api/likes", {
+      const response = await fetch("http://localhost:5000/api/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        
+        body: JSON.stringify({
+          
+          user_id,
+          track_name: track.name,
+          artist: track.artist,
+          spotify_url: track.spotify_url,
+        }),
+      });
+      if (response.ok) {
+        setFavorite(true);
+      } else {
+        console.error("Failed to add favorite");
+      }
+    } catch (error) {
+      console.error("Error adding favorite", error);
+    }
+  };
+
+  // // Handler for Like button
+  // const handleLike = async () => {
+  //   if (!ensureUserId()) return;
+
+  //   try {
+  //     const response = await fetch("http://localhost:5000/api/likes", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         user_id,
+  //         track_name: track.name,
+  //         artist: track.artist,
+  //         spotify_url: track.spotify_url,
+  //       }),
+  //     });
+  //     if (response.ok) {
+  //       setLiked(true);
+  //       setDisliked(false);
+  //     } else {
+  //       console.error("Failed to like track");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error liking track", error);
+  //   }
+  // };
+
+  // Handler for Like button
+const handleLike = async () => {
+  if (!ensureUserId()) return;
+
+  // Prepare the payload
+  const payload = {
+    user_id, // Retrieved from local storage
+    track_name: track.name,
+    artist: track.artist,
+    spotify_url: track.spotify_url,
+  };
+
+  // Log the payload for debugging
+  console.log("Request Payload:", payload);
+
+  try {
+    const response = await fetch("http://localhost:5000/api/likes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload), // Send the payload
+    });
+
+    if (response.ok) {
+      setLiked(true);
+      setDisliked(false);
+      console.log("Track liked successfully");
+    } else {
+      console.error("Failed to like track");
+      const errorData = await response.json();
+      console.error("Error Response:", errorData);
+    }
+  } catch (error) {
+    console.error("Error liking track", error);
+  }
+};
+
+  // Handler for Dislike button
+  const handleDislike = async () => {
+    if (!ensureUserId()) return;
+
+    try {
+      const response = await fetch("http://localhost:5000/api/dislikes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -205,12 +308,38 @@ const TrackCard: React.FC<Props> = ({ track, onPlay }) => {
         }),
       });
       if (response.ok) {
-        setLiked(true);
+        setDisliked(true);
+        setLiked(false);
       } else {
-        console.error("Failed to like track");
+        console.error("Failed to dislike track");
       }
     } catch (error) {
-      console.error("Error liking track", error);
+      console.error("Error disliking track", error);
+    }
+  };
+
+  // Handler for Save button
+  const handleSave = async () => {
+    if (!ensureUserId()) return;
+
+    try {
+      const response = await fetch("http://localhost:5000/api/saves", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id,
+          track_name: track.name,
+          artist: track.artist,
+          spotify_url: track.spotify_url,
+        }),
+      });
+      if (response.ok) {
+        setSaved(true);
+      } else {
+        console.error("Failed to save track");
+      }
+    } catch (error) {
+      console.error("Error saving track", error);
     }
   };
 
@@ -236,14 +365,19 @@ const TrackCard: React.FC<Props> = ({ track, onPlay }) => {
           <Play className="h-5 w-5 mr-2" />
           <span>Play</span>
         </button>
-        {/* Like Button */}
-        <div className="flex justify-center mt-4">
-          <button
-            onClick={handleLike}
-            disabled={liked}
-            className="p-2 rounded-full transition-colors duration-300"
-          >
-            <Heart className={`h-6 w-6 ${liked ? "text-red-500" : "text-gray-400 hover:text-red-500"}`} />
+        {/* Action Buttons */}
+        <div className="flex justify-around items-center mt-4">
+          <button onClick={handleAddFavorite} disabled={favorite} className="p-2 rounded-full transition-colors duration-300">
+            <Heart className={`h-6 w-6 ${favorite ? "text-red-500" : "text-gray-400 hover:text-red-500"}`} />
+          </button>
+          <button onClick={handleLike} disabled={liked} className="p-2 rounded-full transition-colors duration-300">
+            <ThumbsUp className={`h-6 w-6 ${liked ? "text-green-500" : "text-gray-400 hover:text-green-500"}`} />
+          </button>
+          <button onClick={handleDislike} disabled={disliked} className="p-2 rounded-full transition-colors duration-300">
+            <ThumbsDown className={`h-6 w-6 ${disliked ? "text-yellow-500" : "text-gray-400 hover:text-yellow-500"}`} />
+          </button>
+          <button onClick={handleSave} disabled={saved} className="p-2 rounded-full transition-colors duration-300">
+            <Bookmark className={`h-6 w-6 ${saved ? "text-blue-500" : "text-gray-400 hover:text-blue-500"}`} />
           </button>
         </div>
       </div>
