@@ -87,5 +87,15 @@ Integrate a logging solution on both frontend and backend to capture and analyze
 
 
 
+STEP12: FOR CONNECTION WITH POSTGRESQL I HAVE CREATED MIGRATION FOLDER AND USING Flask
+There is a three coommad of flash by running this three command it coonect to database and also
+have to addes config like SQLAlchemy.[https:postgress:passowrd] like this 
 
 
+
+
+
+STEP13: psql -U postgres -h localhost -p 5433 -d music_app
+ /d likes
+ INSERT INTO likes (user_id, track_name, artist, spotify_url, created_at)
+VALUES (12, 'Alchemy', 'Bandish Projekt', 'https://open.spotify.com/track/4gUXpcb2lbDe7a0FNaPUJq', NOW());

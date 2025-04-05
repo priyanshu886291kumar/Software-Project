@@ -215,6 +215,28 @@ function GetRecommendationPage() {
     }
   };
 
+  // const startCamera = async () => {
+  //   setError(""); // Clear any previous errors
+  //   try {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  //     if (videoRef.current) {
+  //       videoRef.current.srcObject = stream;
+  //     }
+  //     setCameraOn(true);
+  //   } catch (err: any) {
+  //     console.error("Error accessing the camera:", err);
+  //     if (err.name === "NotAllowedError") {
+  //       setError("Camera access was denied. Please allow permissions in your browser settings.");
+  //     } else if (err.name === "NotFoundError") {
+  //       setError("No camera was found on this device. Please connect a camera and try again.");
+  //     } else if (err.name === "NotReadableError") {
+  //       setError("The camera is already in use by another application. Please close other applications and try again.");
+  //     } else {
+  //       setError("Could not access camera. Please check your settings.");
+  //     }
+  //   }
+  // };
+
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;

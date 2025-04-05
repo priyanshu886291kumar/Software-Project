@@ -374,6 +374,8 @@ migrate = Migrate(app, db)
 # Set debug mode from environment variable (default is False)
 debug_mode = os.getenv("FLASK_DEBUG", "false").lower() == "true"
 
+
+
 # --- Test PostgreSQL connection ---
 try:
     # This uses pg8000 to check the connection manually.
@@ -430,6 +432,7 @@ def get_emotion():
         # Return error details for debugging
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/recommendations', methods=['GET'])
 @cross_origin()
 def recommendations():
@@ -441,55 +444,120 @@ def recommendations():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route('/api/likes', methods=['POST', 'OPTIONS'])
 @cross_origin()
-def add_like():
+def toggle_like():
     if request.method == 'OPTIONS':
         return jsonify({}), 200
 
     data = request.get_json()
-    # Validate required fields for like
+    print("Incoming Data:", data)  # Debugging: Log the incoming request data
+
     if not data or not data.get("user_id") or not data.get("track_name"):
         return jsonify({"error": "Missing required fields"}), 400
 
     try:
+        # Convert user_id to integer
+        user_id = int(data.get("user_id"))  # Ensure user_id is an integer
+        track_name = data.get("track_name")
+
+        # Step 1: Check if the track is already liked
+        existing_like = Like.query.filter_by(user_id=user_id, track_name=track_name).first()
+        if existing_like:
+            # Remove the like
+            db.session.delete(existing_like)
+            db.session.commit()
+            print("Like removed from database.")  # Debugging: Confirm deletion
+            return jsonify({"message": "Track unliked successfully"}), 200
+
+        # Step 2: Check if the track is disliked and remove it
+        existing_dislike = Dislike.query.filter_by(user_id=user_id, track_name=track_name).first()
+        if existing_dislike:
+            db.session.delete(existing_dislike)
+            db.session.commit()
+            print("Dislike removed from database because track was liked.")  # Debugging: Confirm dislike removal
+
+        # Step 3: Add the like
         like = Like(
-            track_name=data.get("track_name"),
-            artist=data.get("artist", ""),  # Default empty if not provided
+            track_name=track_name,
+            artist=data.get("artist", ""),
             spotify_url=data.get("spotify_url", ""),
-            user_id=data.get("user_id")
+            user_id=user_id
         )
         db.session.add(like)
         db.session.commit()
+        print("Like added to database.")  # Debugging: Confirm addition
         return jsonify({"message": "Track liked successfully"}), 200
+
+    except ValueError:
+        print("Invalid user_id format.")  # Debugging: Log invalid user_id
+        return jsonify({"error": "Invalid user_id format"}), 400
+
     except Exception as e:
-        print("Error in /api/likes:", e)
+        db.session.rollback()
+        print("Error in /api/likes:", e)  # Debugging: Log the error
         return jsonify({"error": str(e)}), 500
+
+
+
+
 
 @app.route('/api/dislikes', methods=['POST', 'OPTIONS'])
 @cross_origin()
-def add_dislike():
+def toggle_dislike():
     if request.method == 'OPTIONS':
         return jsonify({}), 200
 
     data = request.get_json()
-    # Validate required fields for dislike
+    print("Incoming Data:", data)  # Debugging: Log the incoming request data
+
     if not data or not data.get("user_id") or not data.get("track_name"):
         return jsonify({"error": "Missing required fields"}), 400
 
     try:
+        # Convert user_id to integer
+        user_id = int(data.get("user_id"))  # Ensure user_id is an integer
+        track_name = data.get("track_name")
+
+        # Step 1: Check if the track is already disliked
+        existing_dislike = Dislike.query.filter_by(user_id=user_id, track_name=track_name).first()
+        if existing_dislike:
+            # Remove the dislike
+            db.session.delete(existing_dislike)
+            db.session.commit()
+            print("Dislike removed from database.")  # Debugging: Confirm dislike removal
+            return jsonify({"message": "Track undisliked successfully"}), 200
+
+        # Step 2: Check if the track is liked and remove it
+        existing_like = Like.query.filter_by(user_id=user_id, track_name=track_name).first()
+        if existing_like:
+            db.session.delete(existing_like)
+            db.session.commit()
+            print("Like removed from database because track was disliked.")  # Debugging: Confirm like removal
+
+        # Add the dislike
         dislike = Dislike(
-            track_name=data.get("track_name"),
+            track_name=track_name,
             artist=data.get("artist", ""),
             spotify_url=data.get("spotify_url", ""),
-            user_id=data.get("user_id")
+            user_id=user_id
         )
         db.session.add(dislike)
         db.session.commit()
+        print("Dislike added to database.")  # Debugging: Confirm dislike addition
         return jsonify({"message": "Track disliked successfully"}), 200
+
+    except ValueError:
+        print("Invalid user_id format.")  # Debugging: Log invalid user_id
+        return jsonify({"error": "Invalid user_id format"}), 400
+
     except Exception as e:
-        print("Error in /api/dislikes:", e)
+        db.session.rollback()
+        print("Error in /api/dislikes:", e)  # Debugging: Log the error
         return jsonify({"error": str(e)}), 500
+
+
 
 @app.route('/api/saves', methods=['POST', 'OPTIONS'])
 @cross_origin()

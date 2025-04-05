@@ -547,6 +547,7 @@ def get_fallback_recommendations(emotion: str, token: str, headers: Dict) -> Lis
     search_url = "https://api.spotify.com/v1/search"
     params = {"q": query, "type": "track", "limit": 6, "market": "IN"}
 
+
     try:
         response = requests.get(search_url, headers=headers, params=params)
         response.raise_for_status()
@@ -566,5 +567,7 @@ def get_fallback_recommendations(emotion: str, token: str, headers: Dict) -> Lis
     except Exception as e:
         print(f"Fallback search failed: {str(e)}")
         return []
+
+
 
 

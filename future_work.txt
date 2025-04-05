@@ -203,3 +203,34 @@ Continue refining the responsive behavior of your pages. Consider adding ARIA la
 Analytics and Monitoring:
 Add integration with monitoring tools (like Sentry for error tracking) and analytics (like Google Analytics) to track user behavior and troubleshoot issues.
 
+
+
+
+TASK12:🔥 Advanced Features to Add (Next Level)
+1️⃣ Personalized Song Ranking Based on Like History
+Instead of just showing previously liked songs, rank them based on frequency of likes and play count.
+
+If a user liked a song multiple times, prioritize showing it higher in recommendations.
+
+If a song is frequently skipped, push it lower in recommendations.
+
+📌 Example:
+✅ If User A always likes "Song X" when feeling sad, show it first in recommendations.
+❌ If User A skips "Song Y" often, show it less frequently.
+
+
+
+
+4️⃣ Real-Time Feedback for Better Accuracy
+Allow users to rate how well the recommended song matches their emotion.
+
+Use this feedback to improve future recommendations.
+
+If a user dislikes a song, avoid showing it again for the same emotion.
+
+📌 Example:
+👍 "Yes, this song matches my mood!" → More similar songs shown in future.
+👎 "No, this song is not right for my mood." → Adjust recommendation algorithm.
+
+
+
